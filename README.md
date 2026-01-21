@@ -24,23 +24,21 @@ The system follows a **hybrid approach**:
 
 ## 🧠 System Architecture
 
-1. User enters a URL
-2. URL features are extracted
-3. WHOIS domain age is fetched
-4. ML model predicts phishing probability
-5. Risk thresholds classify the URL
-6. Result is shown in UI with confidence
+1. User enters a URL  
+2. URL features are extracted  
+3. WHOIS domain age is fetched  
+4. ML model predicts phishing probability  
+5. Risk thresholds classify the URL  
+6. Result is shown in UI with confidence  
 
 ---
 
 ## 🖥️ User Interface Preview
 
-```md
 ## 📸 Screenshots
 
 ![Home Page](screenshot/home.png)
 ![Result Page](screenshot/result.png)
-
 
 ---
 
