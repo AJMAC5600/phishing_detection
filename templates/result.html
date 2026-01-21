@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
+
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-slate-800">
+            🔍 Scan Result
+        </h1>
+
+        <div class="mt-6 space-y-4">
+            <div>
+                <p class="text-sm text-slate-500">Scanned URL</p>
+                <p class="break-all text-slate-800 font-medium">
+                    {{ url }}
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-slate-600">Status</span>
+
+                {% if label == 'Phishing' %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-700">
+                        🚨 Phishing
+                    </span>
+                {% else %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700">
+                        ✅ Legitimate
+                    </span>
+                {% endif %}
+            </div>
+
+            <div>
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="text-slate-600">Confidence</span>
+                    <span class="font-semibold">{{ confidence }}%</span>
+                </div>
+
+                <div class="w-full bg-slate-200 rounded-full h-3">
+                    <div
+                        class="{% if label == 'Phishing' %}bg-red-500{% else %}bg-green-500{% endif %} h-3 rounded-full"
+                        style="width: {{ confidence }}%">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/"
+           class="block mt-8 text-center text-blue-600 hover:underline font-medium">
+            🔁 Scan another URL
+        </a>
+    </div>
+
+</body>
+</html>

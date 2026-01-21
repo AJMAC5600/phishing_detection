@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phishing Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
+
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-slate-800">
+            🔐 Phishing Detection System
+        </h1>
+
+        <p class="text-sm text-center text-slate-500 mt-2">
+            Enter a website URL to check if it is safe or phishing
+        </p>
+
+        <form method="POST" action="/check" class="mt-6 space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700">
+                    Website URL
+                </label>
+                <input
+                    type="text"
+                    name="url"
+                    required
+                    placeholder="https://example.com"
+                    class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">
+                Scan URL
+            </button>
+        </form>
+
+        <p class="text-xs text-center text-slate-400 mt-6">
+            Powered by ML + AI
+        </p>
+    </div>
+
+</body>
+</html>
