@@ -35,8 +35,10 @@ The system follows a **hybrid approach**:
 
 ## 🖥️ User Interface Preview
 
-
-::contentReference[oaicite:0]{index=0}
+> Add screenshots here (recommended):
+```md
+![Home Page](screenshot/home.png)
+![Result Page](screenshot/result.png)
 
 
 ---
