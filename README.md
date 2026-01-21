@@ -37,8 +37,8 @@ The system follows a **hybrid approach**:
 
 > Add screenshots here (recommended):
 ```md
-![Home Page](screenshot/home.png)
-![Result Page](screenshot/result.png)
+![Home Page](/screenshot/home.png)
+![Result Page](/screenshot/result.png)
 
 
 ---
