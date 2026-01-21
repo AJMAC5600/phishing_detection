@@ -36,6 +36,8 @@ The system follows a **hybrid approach**:
 ## 🖥️ User Interface Preview
 
 ```md
+## 📸 Screenshots
+
 ![Home Page](screenshot/home.png)
 ![Result Page](screenshot/result.png)
 
