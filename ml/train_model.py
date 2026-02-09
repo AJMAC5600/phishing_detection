@@ -24,7 +24,7 @@ FEATURE_ORDER = [
 
 
 print("[+] Loading dataset...")
-df = pd.read_csv("data/urls.csv")
+df = pd.read_csv("data/live_urls.csv")
 
 X = []
 y = df["label"].values
