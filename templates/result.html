@@ -1,94 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Scan Result</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <title>Phishing Analysis Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-  <body
-    class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center"
-  >
-    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-      <h1 class="text-2xl font-bold text-center text-slate-800">
-        🔍 Scan Result
-      </h1>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
 
-      <div class="mt-6 space-y-4">
-        <!-- URL -->
-        <div>
-          <p class="text-sm text-slate-500">Scanned URL</p>
-          <p class="break-all text-slate-800 font-medium">{{ url }}</p>
-        </div>
+<div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
+  <h1 class="text-2xl font-bold text-center text-slate-800 mb-6">
+    🔍 Phishing Analysis Report
+  </h1>
 
-        <!-- STATUS -->
-        <div class="flex items-center justify-between">
-          <span class="text-sm font-medium text-slate-600">Status</span>
+  <!-- URL -->
+  <p class="text-sm text-slate-500">URL</p>
+  <p class="break-all font-medium mb-4">{{ url }}</p>
 
-          {% if label == 'Phishing' %}
-          <span
-            class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-700"
-          >
-            🚨 Phishing
-          </span>
+  <!-- Probability & Risk -->
+  <div class="mb-4">
+    <p><strong>Phishing Probability:</strong> {{ result.phishing_probability }}%</p>
+    <p>
+      <strong>Risk Level:</strong>
+      <span class="{% if result.risk_level == 'SAFE' %}text-green-600{% elif result.risk_level == 'SUSPICIOUS' %}text-yellow-600{% else %}text-red-600{% endif %}">
+        {{ result.risk_level }}
+      </span>
+    </p>
+  </div>
 
-          {% elif label == 'Suspicious' %}
-          <span
-            class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700"
-          >
-            ⚠️ Suspicious
-          </span>
+  <!-- Reason -->
+  <div class="mb-4">
+    <p class="font-semibold">Reason:</p>
+    <p class="text-slate-700">{{ result.reason }}</p>
+  </div>
 
-          {% elif label == 'Offline / Unreachable' %}
-          <span
-            class="px-3 py-1 text-sm font-semibold rounded-full bg-gray-200 text-gray-700"
-          >
-            🌐 Offline / Unreachable
-          </span>
+  <!-- Tips -->
+  <div class="mb-6">
+    <p class="font-semibold">Safety Tips:</p>
+    <p class="text-slate-700">{{ result.tips }}</p>
+  </div>
 
-          {% elif label == 'Invalid URL' %}
-          <span
-            class="px-3 py-1 text-sm font-semibold rounded-full bg-gray-200 text-gray-700"
-          >
-            ❌ Invalid URL
-          </span>
+  <hr class="my-4">
 
-          {% else %}
-          <span
-            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700"
-          >
-            ✅ Legitimate
-          </span>
-          {% endif %}
-        </div>
+  <!-- Domain Info -->
+  <h2 class="text-lg font-semibold mb-2">🌐 Domain Information</h2>
 
-        <!-- CONFIDENCE -->
-        <div>
-          <div class="flex justify-between text-sm mb-1">
-            <span class="text-slate-600">Confidence</span>
+  <ul class="text-sm text-slate-700 space-y-1">
+    <li><strong>WHOIS Registered:</strong> {{ result.whois.registered }}</li>
+    <li><strong>Domain Name:</strong> {{ result.whois.domain }}</li>
+    <li><strong>Created On:</strong> {{ result.whois.created }}</li>
+    <li><strong>Expires On:</strong> {{ result.whois.expires }}</li>
+  </ul>
 
-            {% if label == 'Invalid URL' or label == 'Offline / Unreachable' %}
-            <span class="font-semibold">N/A</span>
-            {% else %}
-            <span class="font-semibold">{{ confidence }}%</span>
-            {% endif %}
-          </div>
+  <a href="/" class="block mt-6 text-center text-blue-600 hover:underline font-medium">
+    🔁 Scan another URL
+  </a>
+</div>
 
-          <div class="w-full bg-slate-200 rounded-full h-3">
-            <div
-              class="h-3 rounded-full {% if label == 'Phishing' %} bg-red-500 {% elif label == 'Suspicious' %} bg-yellow-500 {% elif label == 'Offline / Unreachable' or label == 'Invalid URL' %} bg-gray-400 {% else %} bg-green-500 {% endif %}"
-              style="width: {{ confidence }}%"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <a
-        href="/"
-        class="block mt-8 text-center text-blue-600 hover:underline font-medium"
-      >
-        🔁 Scan another URL
-      </a>
-    </div>
-  </body>
+</body>
 </html>

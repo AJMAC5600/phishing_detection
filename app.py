@@ -14,11 +14,11 @@ def check_url():
     result = predict_url(url)
 
     return render_template(
-        "result.html",
-        url=url,
-        label=result["label"],
-        confidence=result["confidence"]
+    "result.html",
+    url=url,
+    result=result
     )
+
 
 if __name__ == "__main__":
     app.run()
