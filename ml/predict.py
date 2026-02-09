@@ -1,6 +1,7 @@
 import joblib
 from urllib.parse import urlparse
-
+import requests
+import re
 from ml.feature_extractor import extract_features   # ✅ REQUIRED
 from whois_utils.whois_lookup import get_domain_age
 
@@ -45,7 +46,44 @@ model = joblib.load("models/xgboost_model.pkl")
 # Prediction Function
 # =========================
 
+def is_reachable(url: str) -> bool:
+    try:
+        r = requests.head(url, timeout=5, allow_redirects=True)
+        return r.status_code < 500
+    except Exception:
+        return False
+
+def is_valid_url(url: str) -> bool:
+    pattern = re.compile(
+        r'^(https?:\/\/)'           # http:// or https://
+        r'(([A-Za-z0-9-]+\.)+[A-Za-z]{2,})'  # domain
+        r'(\/.*)?$'                 # optional path
+    )
+    return bool(pattern.match(url))
+
 def predict_url(url):
+    # ❌ Invalid format
+    if not is_valid_url(url):
+        return {
+            "label": "Invalid URL",
+            "risk_level": "INVALID",
+            "phishing_probability": 0,
+            "reason": "Input is not a valid URL format",
+            "tips": "Please enter a valid URL starting with http:// or https://",
+            "whois": {}
+        }
+
+    # 🌐 Not reachable
+    if not is_reachable(url):
+        return {
+            "label": "Offline / Unreachable",
+            "risk_level": "UNKNOWN",
+            "phishing_probability": 0,
+            "reason": "Website is not reachable or does not exist",
+            "tips": "Verify the URL or try again later",
+            "whois": {}
+        }
+
     features = extract_features(url)
 
     domain = urlparse(url).hostname
