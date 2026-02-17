@@ -6,56 +6,187 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
+<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center p-6">
 
-<div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
-  <h1 class="text-2xl font-bold text-center text-slate-800 mb-6">
-    🔍 Phishing Analysis Report
+<div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl">
+
+  <!-- Header -->
+  <h1 class="text-3xl font-bold text-center text-slate-800 mb-6">
+    🔍 Phishing Detection Report
   </h1>
 
   <!-- URL -->
-  <p class="text-sm text-slate-500">URL</p>
-  <p class="break-all font-medium mb-4">{{ url }}</p>
-
-  <!-- Probability & Risk -->
-  <div class="mb-4">
-    <p><strong>Phishing Probability:</strong> {{ result.phishing_probability }}%</p>
-    <p>
-      <strong>Risk Level:</strong>
-      <span class="{% if result.risk_level == 'SAFE' %}text-green-600{% elif result.risk_level == 'SUSPICIOUS' %}text-yellow-600{% else %}text-red-600{% endif %}">
-        {{ result.risk_level }}
-      </span>
+  <div class="mb-6">
+    <p class="text-sm text-slate-500">Scanned URL</p>
+    <p class="break-all font-medium text-slate-800 bg-slate-100 p-3 rounded-lg">
+      {{ url }}
     </p>
   </div>
 
-  <!-- Reason -->
-  <div class="mb-4">
-    <p class="font-semibold">Reason:</p>
-    <p class="text-slate-700">{{ result.reason }}</p>
+  <!-- Risk Badge -->
+  <div class="flex items-center justify-between mb-6">
+    <span class="text-lg font-semibold text-slate-700">Risk Level</span>
+
+    <span class="px-4 py-2 text-sm font-bold rounded-full
+      {% if result.risk_level == 'SAFE' %}
+        bg-green-100 text-green-700
+      {% elif result.risk_level == 'SUSPICIOUS' %}
+        bg-yellow-100 text-yellow-700
+      {% elif result.risk_level == 'DANGEROUS' %}
+        bg-red-100 text-red-700
+      {% else %}
+        bg-gray-200 text-gray-700
+      {% endif %}
+    ">
+      {{ result.risk_level }}
+    </span>
   </div>
 
-  <!-- Tips -->
-  <div class="mb-6">
-    <p class="font-semibold">Safety Tips:</p>
-    <p class="text-slate-700">{{ result.tips }}</p>
+  <!-- Confidence Bar -->
+  <div class="mb-8">
+    <div class="flex justify-between text-sm mb-2">
+      <span class="text-slate-600">Hybrid Confidence Score</span>
+      <span class="font-semibold">{{ result.confidence }}%</span>
+    </div>
+
+    <div class="w-full bg-slate-200 rounded-full h-4">
+      <div
+        class="h-4 rounded-full transition-all duration-500
+        {% if result.risk_level == 'SAFE' %}
+          bg-green-500
+        {% elif result.risk_level == 'SUSPICIOUS' %}
+          bg-yellow-500
+        {% elif result.risk_level == 'DANGEROUS' %}
+          bg-red-500
+        {% else %}
+          bg-gray-400
+        {% endif %}"
+        style="width: {{ result.confidence }}%">
+      </div>
+    </div>
   </div>
 
-  <hr class="my-4">
+  <!-- Score Breakdown -->
+  <div class="grid grid-cols-2 gap-6 mb-8">
 
-  <!-- Domain Info -->
-  <h2 class="text-lg font-semibold mb-2">🌐 Domain Information</h2>
+    <div class="bg-slate-50 p-4 rounded-xl shadow-sm">
+      <p class="text-sm text-slate-500">ML Structural Score</p>
+      <p class="text-xl font-bold text-slate-800">
+        {{ result.ml_score }}%
+      </p>
+      <p class="text-xs text-slate-500 mt-1">
+        Based on URL patterns and domain features
+      </p>
+    </div>
 
-  <ul class="text-sm text-slate-700 space-y-1">
-    <li><strong>WHOIS Registered:</strong> {{ result.whois.registered }}</li>
-    <li><strong>Domain Name:</strong> {{ result.whois.domain }}</li>
-    <li><strong>Created On:</strong> {{ result.whois.created }}</li>
-    <li><strong>Expires On:</strong> {{ result.whois.expires }}</li>
-  </ul>
+    <div class="bg-slate-50 p-4 rounded-xl shadow-sm">
+      <p class="text-sm text-slate-500">AI Intent Score</p>
+      <p class="text-xl font-bold text-slate-800">
+        {{ result.ai_score }}%
+      </p>
+      <p class="text-xs text-slate-500 mt-1">
+        Based on social-engineering indicators
+      </p>
+    </div>
 
-  <a href="/" class="block mt-6 text-center text-blue-600 hover:underline font-medium">
-    🔁 Scan another URL
-  </a>
+  </div>
+
+<!-- Gemini Explanation -->
+<div class="mb-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+  <p class="font-semibold text-slate-800 mb-2">
+    🧠 Gemini AI Explanation
+  </p>
+
+  <!-- Typing Area -->
+  <div id="ai-explanation"
+       class="text-sm text-slate-700 whitespace-pre-wrap min-h-[60px]">
+    <span id="typing-indicator" class="text-slate-500 animate-pulse">
+      Gemini is analyzing...
+    </span>
+  </div>
 </div>
+
+  <!-- Action Recommendation -->
+  <div class="mb-8">
+    <p class="font-semibold text-slate-800 mb-2">⚠ Recommended Action</p>
+    <p class="text-sm text-slate-700">
+      {{ result.tips }}
+    </p>
+  </div>
+
+  <!-- Domain Intelligence -->
+  {% if result.whois %}
+  <div class="mb-8">
+    <h2 class="text-lg font-semibold text-slate-800 mb-3">
+      🌐 Domain Intelligence
+    </h2>
+
+    <div class="grid grid-cols-2 gap-4 text-sm text-slate-700">
+      <div><strong>Domain:</strong> {{ result.whois.domain }}</div>
+      <div><strong>WHOIS Registered:</strong> {{ result.whois.registered }}</div>
+      <div><strong>Created On:</strong> {{ result.whois.created }}</div>
+      <div><strong>Expires On:</strong> {{ result.whois.expires }}</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Footer -->
+  <div class="text-center">
+    <a href="/" class="text-blue-600 hover:underline font-medium">
+      🔁 Scan Another URL
+    </a>
+  </div>
+
+</div>
+<script>
+  const explanationBox = document.getElementById("ai-explanation");
+  const typingIndicator = document.getElementById("typing-indicator");
+
+  // Start streaming from backend
+  fetch("/stream_explanation", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "url={{ url }}"
+  })
+  .then(response => {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    explanationBox.innerHTML = ""; // Clear "analyzing..."
+
+    function read() {
+      reader.read().then(({ done, value }) => {
+        if (done) {
+          addCursor(false);
+          return;
+        }
+
+        explanationBox.textContent += decoder.decode(value);
+        addCursor(true);
+        read();
+      });
+    }
+
+    read();
+  });
+
+  // Blinking cursor effect
+  function addCursor(show) {
+    let cursor = document.getElementById("cursor");
+    if (!cursor && show) {
+      cursor = document.createElement("span");
+      cursor.id = "cursor";
+      cursor.textContent = "▋";
+      cursor.className = "animate-pulse";
+      explanationBox.appendChild(cursor);
+    }
+    if (!show && cursor) {
+      cursor.remove();
+    }
+  }
+</script>
 
 </body>
 </html>
